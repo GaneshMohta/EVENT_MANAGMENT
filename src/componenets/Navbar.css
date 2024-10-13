@@ -1,0 +1,136 @@
+ body ,html{
+  box-sizing: border-box;
+ }
+
+ .navbar {
+    display: flex;
+    font-family: "Nunito", sans-serif;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    height: 20vh;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0%;
+    z-index: 1;
+  }
+
+  .user-email{
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #009688;
+    background-color: lightblue;
+    border-radius: 10px;
+    padding: 10px;
+    position: relative;
+    bottom: 10px;
+  }
+/*
+  .navbar .logo {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+
+  .nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+  }
+
+  .nav-links ul {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+  } */
+
+  .menu-icon {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 24px;
+    color: white;
+    font-size: larger;
+  }
+
+
+  .bar {
+    width: 30px;
+    font-size: 1px;
+    height: 4px;
+    background-color: rgb(255, 255, 255);
+    margin: 4px 0;
+    transition: 0.4s;
+    color: wheat;
+    z-index: 1;
+  }
+
+  .bar1 {
+    transform: rotate(-45deg) translate(-5px, 8px);
+  }
+
+  .bar2 {
+    opacity: 0;
+  }
+
+  .bar3 {
+    transform: rotate(45deg) translate(-5px, -8px);
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .nav-links {
+        position: absolute;
+        right: 0;
+        top: 40px;
+        height: 30vh;
+        width: 50%;
+        background-color: #282c34;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.5s ease-in;
+        visibility: hidden;
+    }
+
+    .nav-links.active {
+      transform: translateX(0%);
+      visibility: visible;
+    }
+
+    .nav-links ul {
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .menu-icon {
+      display: flex;
+      position: relative;
+      bottom: 15px;
+    }
+  }
+
+  .nav-links li {
+    list-style: none;
+  }
+
+  .nav-links li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    transition: color 0.3s ease-in;
+  }
+
+  .nav-links li a:hover {
+    color: #61dafb;
+  }
