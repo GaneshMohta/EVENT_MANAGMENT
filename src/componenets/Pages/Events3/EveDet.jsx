@@ -35,7 +35,7 @@ export default function EveDet() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(`http://localhost:3003/post/${id}`);
+        const response = await axios.get(`https://event-managment-1l2o.onrender.com/post/${id}`);
         setEventData(response.data);
       } catch (err) {
         console.error('Error fetching events:', err);
@@ -61,7 +61,7 @@ export default function EveDet() {
 
     try {
       const response = await axios.post(
-        'http://localhost:3003/registration/register',
+        'https://event-managment-1l2o.onrender.com/registration/register',
         {
           userId,
           eventId: eventData?._id,
@@ -84,7 +84,7 @@ export default function EveDet() {
       <Navbar />
       <div className="banner">
         <img
-          src={`http://localhost:3003/${eventData?.eventImage}`}
+          src={`https://event-managment-1l2o.onrender.com/${eventData?.eventImage}`}
           alt={eventData?.eventName}
           className="banner-image"
         />
