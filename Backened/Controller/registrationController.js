@@ -5,31 +5,36 @@ const mongoose = require('mongoose');
 const registerForEvent = async (req, res) => {
   const { userId, eventId } = req.body;
 
+  // if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(eventId)) {
+  //   return res.status(400).json({ message: 'Invalid userId or eventId format' });
+  // }
+
   try {
-    if (!mongoose.Types.ObjectId.isValid(eventId)) {
-      return res.status(400).json({ message: 'Invalid event ID format' });
-    }
+    // Convert to ObjectId only after validation
+    // const eventObjectId = new mongoose.Types.ObjectId(eventId);
+    // const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    const objectIdEventId = new mongoose.Types.ObjectId(eventId);
-
-    const event = await Event.findById(objectIdEventId);
-
+    const event = await Event.findById(eventId);
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
 
     if (event.registrationSeats <= 0) {
-      return res.status(400).json({ message: 'No seats available for this event' });
+      return res.status(404).json({ message: 'No seats available' });
     }
 
-    const newRegistration = new Registration({ userId, eventId: objectIdEventId });
+    const newRegistration = new Registration({
+      userId: userId,
+      eventId: eventId,
+    });
+
     await newRegistration.save();
 
     event.registrationSeats -= 1;
     await event.save();
 
     res.status(201).json({ message: 'Registration successful', event });
-    console.log("success");
+    console.log('Registration successful');
   } catch (error) {
     console.error('Error registering for event:', error);
     res.status(500).json({ message: 'Internal Server Error' });

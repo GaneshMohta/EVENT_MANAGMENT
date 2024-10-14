@@ -6,9 +6,12 @@ const multer = require('multer');
 const path = require('path');
 const eventRoutes = require("./Routes/postRoutes")
 const registrationRoutes = require('./Routes/registrationRoutes');
+const PaymentRoutes = require('./Routes/PaymentRoutes');
+
 
 
 const userRouter = require("./Controller/userController")
+
 dotenv.config();
 
 
@@ -41,6 +44,7 @@ const storage = multer.diskStorage({
   app.use("/user",userRouter);
   app.use("/post",eventRoutes);
   app.use('/registration',registrationRoutes)
+  app.use('/payment',PaymentRoutes);
   app.post('/uploads',upload.single('image'),(req,res)=>{
   const imageUrl = `/uploads/${req.file.filename}`;
   res.json({imageUrl});

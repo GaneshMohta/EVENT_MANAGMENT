@@ -4,6 +4,7 @@ import Navbar from '../../Nabvar';
 import axios from 'axios';
 import Popup from '../Popup';
 import './Eve3.css';
+import Payment from '../Payment';
 
 export default function EveDet() {
   const { id } = useParams();
@@ -13,11 +14,11 @@ export default function EveDet() {
   const [userEmail, setUserEmail] = useState('');
   const [username, setUsername] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); 
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isPaymentReady, setPaymentReady] = useState(false); // Track payment readiness
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch user details from local storage
     const email = localStorage.getItem('userEmail');
     const userRole = localStorage.getItem('userRole') || 'user';
 
@@ -52,13 +53,21 @@ export default function EveDet() {
 
   const eventSubmit = async (e) => {
     e.preventDefault();
+    setPaymentReady(true);
+  };
+
+  const handlePaymentSuccess = async () => {
     const userId = localStorage.getItem('userId');
 
     try {
-      const response = await axios.post('http://localhost:3003/registration/register', {
-        userId,
-        eventId: eventData?._id,
-      });
+      const response = await axios.post(
+        'http://localhost:3003/registration/register',
+        {
+          userId,
+          eventId: eventData?._id,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
       if (response.status === 201) {
         alert('Registration successful!');
@@ -67,18 +76,6 @@ export default function EveDet() {
     } catch (error) {
       console.error('Registration failed:', error);
       alert('Registration failed. Please try again.');
-    }
-  };
-
-  const handleUpdateEvent = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:3003/post/${id}`, eventData);
-      alert('Event updated successfully!');
-      handleCloseModal();
-    } catch (error) {
-      console.error('Event update failed:', error);
-      alert('Failed to update the event.');
     }
   };
 
@@ -104,35 +101,53 @@ export default function EveDet() {
             </p>
           </div>
 
-          <div className="offer-badge">{eventData?.offer || 'No special offer'}</div>
+          <div className="offer-badge">
+            {eventData?.offer || 'No special offer'}
+          </div>
 
-          <div className='flex justify-center w-[50vw] items-center text-center relative left-[25%]'>
-          {userType === 'user' ? (
-            <div className="registration-panel w-[50vw] text-center">
-              <div className="free-tag">₹ {eventData?.price || 'Free'}</div>
-              <button className="register-btn" onClick={handleOpenModal}>
-                Register
-              </button>
-              <div className="detail">
-                <p>👥 Team Size: {eventData?.teamSize || 1}</p>
-                <p>🗓️ Registration Deadline: {eventData?.deadline || 'N/A'}</p>
+          <div className="flex justify-center w-[50vw] items-center text-center relative left-[25%]">
+            {userType === 'user' ? (
+              <div className="registration-panel w-[50vw] text-center">
+                <div className="free-tag">
+                  ₹ {eventData?.price || 'Free'}
+                </div>
+                <button className="register-btn" onClick={handleOpenModal}>
+                  Register
+                </button>
+                <div className="detail">
+                  <p>👥 Team Size: {eventData?.teamSize || 1}</p>
+                  <p>
+                    🗓️ Registration Deadline:{' '}
+                    {eventData?.deadline || 'N/A'}
+                  </p>
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="admin-panel">
-              <button className="update-btn register-btn" onClick={handleOpenModal}>
-                Update Event
-              </button>
-              <button className='register-btn' onClick={() => navigate(`/manage-speakers/${id}`)}>
-                Manage Speakers
-              </button>
-              <button className=' register-btn' onClick={() => navigate(`/case-studies/${id}`)}>
-                View Case Studies
-              </button>
-            </div>
-          )}</div>
+            ) : (
+              <div className="admin-panel">
+                <button
+                  className="update-btn register-btn"
+                  onClick={handleOpenModal}
+                >
+                  Update Event
+                </button>
+                <button
+                  className="register-btn"
+                  onClick={() => navigate(`/manage-speakers/${id}`)}
+                >
+                  Manage Speakers
+                </button>
+                <button
+                  className="register-btn"
+                  onClick={() => navigate(`/case-studies/${id}`)}
+                >
+                  View Case Studies
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
       <Popup isOpen={isModalOpen} onClose={handleCloseModal}>
         {userType === 'user' ? (
           <>
@@ -161,8 +176,14 @@ export default function EveDet() {
               <p>
                 Price: <span>{eventData?.price || 'Free'}</span>
               </p>
-              <button type="submit">Submit</button>
+              <button type="submit">Proceed to Payment</button>
             </form>
+            {isPaymentReady && (
+              <Payment
+                eventPrice={eventData?.price}
+                onSuccess={handlePaymentSuccess}
+              />
+            )}
           </>
         ) : (
           <>

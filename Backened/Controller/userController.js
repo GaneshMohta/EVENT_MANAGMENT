@@ -39,11 +39,13 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
+      console.log("notid")
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log("notmatch")
       return res.status(400).json({ error: 'Invalid credentials' });
     }
 
@@ -53,7 +55,6 @@ router.post('/login', async (req, res) => {
         role: user.role,
       },
     };
-
     const token = jwt.sign(payload, 'a1s2d3f4', { expiresIn: '1h' });
 
     res.json({userId:user.userId, token });
@@ -62,5 +63,4 @@ router.post('/login', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
-
 module.exports = router;

@@ -394,8 +394,10 @@ form button[type="submit"]:hover {
 
     #get-started {
         margin: 10px 0;
+       
     }
 }
+
 
 @media only screen and (max-width: 1170px) {
     .about {
