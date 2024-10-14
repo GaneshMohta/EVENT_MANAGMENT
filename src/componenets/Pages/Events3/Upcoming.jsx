@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import axios to fetch data
-import './Eve3.css';
+import './eve3.css';
 import { Link } from 'react-router-dom';
 
 const Upcoming = () => {
