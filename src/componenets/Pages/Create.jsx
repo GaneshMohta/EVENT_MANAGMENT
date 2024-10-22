@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
 import Nabvar from '../Nabvar';
 import axios from 'axios'
 import './pages.css'
 import { useDispatch } from 'react-redux';
-import { addEventAsync } from '../../Redux/eventsSlice';
 import { useNavigate } from 'react-router-dom';
+// import { addEventAsync } from '../../Redux/eventsSlice';
 
 const Create = () => {
   const [eventType, setEventType] = useState('');
@@ -17,6 +16,8 @@ const Create = () => {
   const [eventImage, setEventImage] = useState('');
   const [imagePreview, setImagePreview] = useState('');
   const [date , setDate] = useState('');
+
+  const Id = localStorage.getItem('userId');
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -41,6 +42,7 @@ const Create = () => {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append('AdminId', Id);
     formData.append('eventType', eventType);
     formData.append('eventName', eventName);
     formData.append('speakerName', speakerName);
@@ -52,10 +54,12 @@ const Create = () => {
 
     console.log('Event Data:', formData);
 
-    const response=await axios.post('https://event-managment-1l2o.onrender.com/post/event',formData);
+    const response=await axios.post('http://localhost:3003/post/event',formData,
+      { headers: { 'Content-Type': 'multipart/form-data' }}
+    );
 
     if(response.status === 201){
-      Navigate('/create')
+      Navigate('/')
     }
 
     // dispatch(AddEvents({eventType : eventType, data: {eventName:eventName}}))

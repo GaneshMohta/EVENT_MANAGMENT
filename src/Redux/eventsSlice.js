@@ -40,7 +40,7 @@ export const {eventAddStart, eventAddSuccess, eventAddFailure} = eventsSlice.act
 export const addEventAsync = (eventData) => async (dispatch)=> {
 dispatch(eventAddStart());
 try{
-  const response = await axios.post('https://event-managment-1l2o.onrender.com/post/event',eventData);
+  const response = await axios.post('http://localhost:3003/post/event',eventData);
   dispatch(eventAddSuccess({eventType:eventData.eventType , data:response.data}))
 }catch (error){
   dispatch(eventAddFailure(error.message));

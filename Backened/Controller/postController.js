@@ -1,12 +1,15 @@
 const Event = require('../Model/postSchema');
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 const createEvent = async (req, res) => {
   try {
     console.log('Request Body:', req.body);
     console.log('Uploaded File:', req.file.filename);
-    const EventId=uuidv4();
+    console.log("id",req.body.AdminId);
+    // const EventId=uuidv4();
+
+
     const newEvent = new Event({
-      EventId,
+      AdminId: req.body.AdminId,
       eventType: req.body.eventType,
       eventName: req.body.eventName,
       speakerName: req.body.speakerName,
@@ -14,7 +17,7 @@ const createEvent = async (req, res) => {
       eventDescription: req.body.eventDescription,
       registrationSeats: req.body.registrationSeats,
       eventImage: req.file ? req.file.path : '',
-      Date : req.file.Date
+      Date : req.body.Date
     });
 
     const savedEvent = await newEvent.save();
@@ -63,7 +66,7 @@ const updateEventById = async (req, res) => {
       price: req.body.price,
       eventDescription: req.body.eventDescription,
       registrationSeats: req.body.registrationSeats,
-      eventImage: req.file ? req.file.path : undefined, // Optional image update
+      eventImage: req.file ? req.file.path : undefined,  
       Date: req.body.Date,
     };
 

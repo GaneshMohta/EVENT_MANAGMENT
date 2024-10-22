@@ -23,10 +23,16 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 const port = 3003;
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(()=>console.log("Connected")).catch((e)=>console.log(e))
+// mongoose.connect(process.env.MONGODB_URI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// }).then(()=>console.log("Connected")).catch((e)=>console.log(e))
+
+mongoose.connect("mongodb://127.0.0.1/EMS").then(()=>{
+  console.log("connected to database");
+}).catch((e)=>{
+  console.log(e)
+})
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

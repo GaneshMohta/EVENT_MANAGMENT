@@ -4,6 +4,8 @@ import './pages.css'
 import Nabvar from '../Nabvar'
 
 const Event = () => {
+
+  const Role = localStorage.getItem('userRole');
   return (
     <div>
       <Nabvar />
@@ -26,14 +28,23 @@ const Event = () => {
                 <h1 className='mb-0'>WELCOME</h1>
                 <p className='text-green-300'>Enjoy, Explore, Event !</p>
                 <div className="button-container">
-                    <Link to="/Create">
-                        <button type="button" id='get-started'>GET STARTED</button>
-                    </Link>
+                  {
+                    Role === "user" ? (<div></div>):
+                    (<Link to="/Create">
+                      <button type="button" id='get-started'>GET STARTED</button>
+                  </Link>)
+                  }
+
                 </div>
             </div>
         </section>
         <div className="event-container bg-gray-300">
-      <h1 className="event-title text-black">The simplest way to manage all your events</h1>
+          {
+           Role === "user" ?
+            (<h1 className="event-title text-black">The simplest way to Book your events</h1>):
+            (<h1 className="event-title text-black">The simplest way to manage all your events</h1>)
+          }
+
       <div className="event-cards">
         <div className="card in-person">
           <h2>In-person events</h2>

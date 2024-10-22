@@ -3,19 +3,15 @@ const Registration = require('../Model/registrationSchema');
 const mongoose = require('mongoose');
 
 const registerForEvent = async (req, res) => {
-  const { userId, eventId } = req.body;
-
-  // if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(eventId)) {
-  //   return res.status(400).json({ message: 'Invalid userId or eventId format' });
-  // }
+  const { userId, Eventid, location, age, gender} = req.body;
+  console.log(userId,Eventid);
 
   try {
-    // Convert to ObjectId only after validation
-    // const eventObjectId = new mongoose.Types.ObjectId(eventId);
-    // const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    const event = await Event.findById(eventId);
+
+    const event = await Event.findById(Eventid);
     if (!event) {
+      console.log("hii")
       return res.status(404).json({ message: 'Event not found' });
     }
 
@@ -24,8 +20,11 @@ const registerForEvent = async (req, res) => {
     }
 
     const newRegistration = new Registration({
-      userId: userId,
-      eventId: eventId,
+      userId,
+      Eventid,
+      location,
+      age,
+      gender
     });
 
     await newRegistration.save();
@@ -41,4 +40,42 @@ const registerForEvent = async (req, res) => {
   }
 };
 
-module.exports = { registerForEvent };
+
+const registrationDetail = async (req, res) => {
+  try {
+
+    const detail = await Registration.find({Eventid:req.params.id});
+    console.log(detail)
+    if (!detail) {
+      return res.status(404).json({ message: 'Registration not found' });
+    }
+    return res.json({ count:detail.length});
+  } catch (error) {
+    console.error('Error fetching registration details:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+const analysisRegistration = async (req,res)=>{
+
+  try{
+    const analyts = await Registration.aggregate([
+      { $match : {Eventid:req.params.id}},
+      {
+        $group : {
+          _id : {
+            gender: "$gender",
+          },
+          count :{$sum :1}
+        },
+      },
+    ]);
+    res.json(analyts);
+  }
+  catch(e){
+    console.log("error in analayts :",e);
+    res.status(500).json({message : "Issue is there"});
+  }
+}
+
+module.exports = { registerForEvent, registrationDetail , analysisRegistration};

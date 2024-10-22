@@ -224,8 +224,8 @@
 
     .left-content img{
       width: 100vh;
-      position: relative;
-      left: 20vh;
+      /* position: relative;
+      left: 20vh; */
       text-align: center;
     }
 

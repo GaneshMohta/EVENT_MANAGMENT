@@ -5,6 +5,8 @@ import axios from 'axios';
 import Popup from '../Popup';
 import "./eve3.css";
 import Payment from '../Payment';
+import * as d3 from "d3";
+
 
 export default function EveDet() {
   const { id } = useParams();
@@ -13,10 +15,17 @@ export default function EveDet() {
   const [userType, setUserType] = useState('user');
   const [userEmail, setUserEmail] = useState('');
   const [username, setUsername] = useState('');
+  const [age,setAge] = useState('');
+  const [gender,setGender] = useState("Male");
+  const [location , setLocation] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isPaymentReady, setPaymentReady] = useState(false); // Track payment readiness
+  const [isPaymentReady, setPaymentReady] = useState(false);
+  const [analysis , setAnalysis] = useState();
+  const [cnt , setCnt] = useState(0);
   const navigate = useNavigate();
+
+
 
   useEffect(() => {
     const email = localStorage.getItem('userEmail');
@@ -35,7 +44,7 @@ export default function EveDet() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(`https://event-managment-1l2o.onrender.com/post/${id}`);
+        const response = await axios.get(`http://localhost:3003/post/${id}`);
         setEventData(response.data);
       } catch (err) {
         console.error('Error fetching events:', err);
@@ -45,6 +54,124 @@ export default function EveDet() {
     };
     fetchEvents();
   }, [id]);
+
+
+  useEffect(() => {
+    const fetchRegistration = axios.get(`http://localhost:3003/registration/${id}`);
+    const fetchAnalysis = axios.get(`http://localhost:3003/registration/analysis/${id}`);
+
+    Promise.all([fetchRegistration, fetchAnalysis])
+      .then(([res1, res2]) => {
+        console.log(res1.data.count);
+        console.log("res2",res2.data);
+        setCnt(res1.data.count);
+
+        const pieData = [
+          { label: "Registration", value: res1.data.count},
+          { label: "Remaining", value: 100 - res1.data.count }
+        ];
+        createPieChart(pieData);
+        setAnalysis(res2.data);
+        createBarChart(res2.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data", error);
+      });
+  }, [id]);
+
+  const createPieChart = (data) => {
+    const width = 350;
+    const height = 350;
+    const margin = 20;
+
+    const radius = width / 2 - margin;
+
+    d3.select("#pieChart").select("svg").remove();
+
+    const svg = d3
+      .select("#pieChart")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    const pie = d3
+      .pie()
+      .value((d) => d.value);
+    const arc = d3
+      .arc()
+      .innerRadius(0)
+      .outerRadius(radius);
+
+    svg
+      .selectAll("path")
+      .data(pie(data))
+      .enter()
+      .append("path")
+      .attr("d", arc)
+      .attr("fill", (d) => color(d.data.label))
+      .attr("stroke", "white")
+      .style("stroke-width", "2px")
+      .style("opacity", 0.7);
+
+    svg
+      .selectAll("text")
+      .data(pie(data))
+      .enter()
+      .append("text")
+      .text((d) => `${d.data.label}: ${d.data.value}`)
+      .attr("transform", (d) => `translate(${arc.centroid(d)})`)
+      .style("text-anchor", "middle")
+      .style("font-size", 15);
+  };
+
+  const createBarChart = (data) => {
+    const width = 400;
+    const height = 350;
+    const margin = { top: -20, right: 30, bottom: 40, left: 40 };
+
+    d3.select("#barChart").select("svg").remove();
+    const svg = d3
+      .select("#barChart")
+      .append("svg")
+      .attr("width", width + margin.top + margin.bottom)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3
+      .scaleBand()
+      .domain(data.map((d) => d._id.gender))
+      .range([0, width])
+      .padding(0.1);
+
+    const y = d3
+      .scaleLinear()
+      .domain([0, 10])
+      .nice()
+      .range([height, 50]);
+
+    svg.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x));
+
+    svg.append("g")
+      .call(d3.axisLeft(y));
+    svg.selectAll("rect")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", (d) => x(d._id.gender))
+      .attr("y", (d) => y(d.count))
+      .attr("width", x.bandwidth())
+      .attr("height", (d) => height - y(d.count))
+      .attr("fill", "orange");
+};
+
+
+
 
   if (loading) return <p>Loading...</p>;
 
@@ -57,14 +184,19 @@ export default function EveDet() {
   };
 
   const handlePaymentSuccess = async () => {
+    console.log("called");
+    console.log(gender);
     const userId = localStorage.getItem('userId');
 
     try {
       const response = await axios.post(
-        'https://event-managment-1l2o.onrender.com/registration/register',
+        'http://localhost:3003/registration/register',
         {
           userId,
-          eventId: eventData?._id,
+          Eventid: eventData?._id,
+          location,
+          age,
+          gender
         },
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -79,12 +211,24 @@ export default function EveDet() {
     }
   };
 
+  const handleUpdateEvent = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:3003/post/${id}`, eventData);
+      alert('Event updated successfully!');
+      handleCloseModal();
+    } catch (error) {
+      console.log('Event update failed:', error);
+      alert('Failed to update the event.');
+    }
+  };
+
   return (
     <div className="container1">
       <Navbar />
       <div className="banner">
         <img
-          src={`https://event-managment-1l2o.onrender.com/${eventData?.eventImage}`}
+          src={`http://localhost:3003/${eventData?.eventImage}`}
           alt={eventData?.eventName}
           className="banner-image"
         />
@@ -95,7 +239,8 @@ export default function EveDet() {
           <p className="event-organization">{eventData?.organization}</p>
           <div className="event-meta">
             <p>📍 {eventData?.eventType}</p>
-            <p>📅 Updated On: {eventData?.date}</p>
+            <p>📅 Updated On: {eventData?.Date}</p>
+            <p>👨‍💼 Speaker: {eventData?.speakerName}</p>
             <p>
               🔗 <Link to={eventData?.website || '#'}>Official Website</Link>
             </p>
@@ -130,7 +275,7 @@ export default function EveDet() {
                 >
                   Update Event
                 </button>
-                <button
+                {/* <button
                   className="register-btn"
                   onClick={() => navigate(`/manage-speakers/${id}`)}
                 >
@@ -138,10 +283,11 @@ export default function EveDet() {
                 </button>
                 <button
                   className="register-btn"
-                  onClick={() => navigate(`/case-studies/${id}`)}
+                  onClick={() => scrollTo(`pieChart`)}
+
                 >
                   View Case Studies
-                </button>
+                </button> */}
               </div>
             )}
           </div>
@@ -173,6 +319,29 @@ export default function EveDet() {
                   required
                 />
               </label>
+              <label>Age :
+                <input
+                type='text'
+                className='text-gray-600'
+                value={age}
+                onChange={(e)=>setAge(e.target.value)}
+                required
+                />
+              </label>
+              <label>Gender :
+                <select value={gender} onChange={(e)=>setGender(e.target.value)}>
+                  <option value="Male" >Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Others" >Others</option>
+                </select>
+              </label>
+              <label>Location :
+                <input type='text'
+                value={location}
+                onChange={(e)=>setLocation(e.target.value)}
+                required
+                />
+              </label>
               <p>
                 Price: <span>{eventData?.price || 'Free'}</span>
               </p>
@@ -181,7 +350,7 @@ export default function EveDet() {
             {isPaymentReady && (
               <Payment
                 eventPrice={eventData?.price}
-                onSuccess={handlePaymentSuccess}
+                onUpdate={handlePaymentSuccess}
               />
             )}
           </>
@@ -236,6 +405,19 @@ export default function EveDet() {
           </>
         )}
       </Popup>
+      { userType === 'admin' ?
+        (<div className='bg-slate-950 text-white'>
+          <div className='text-center'><h1>Event Registration Studies</h1></div>
+          <div className='flex justify-evenly'>
+          <div id="pieChart"> <h1 className='text-center'><span className='text-orange-600'>Collection : </span> ₹{eventData?.price*cnt}</h1></div>
+
+          <div>
+          <div id="barChart"><h1 className='text-center text-orange-600'>Gender analysis</h1></div>
+          </div>
+          </div>
+
+        </div>):(<div></div>)
+      }
     </div>
   );
 }

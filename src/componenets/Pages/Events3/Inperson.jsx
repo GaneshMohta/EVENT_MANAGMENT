@@ -13,7 +13,7 @@ const Inperson = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('https://event-managment-1l2o.onrender.com/post/event');
+        const response = await axios.get('http://localhost:3003/post/event');
         const events = response.data;
 
         console.log(events)
@@ -84,7 +84,7 @@ const Inperson = () => {
               </div>
               <div className="card virtual text-center">
                 <h2>Past Events</h2>
-                <Link to="/Virtual">
+                <Link to="/Past">
                   <button className="explore-button">Explore More</button>
                 </Link>
                 <img
@@ -133,7 +133,7 @@ const Inperson = () => {
           { inpersonEvents.length > 0 ? (
             inpersonEvents.map((event, index) => (
               <div className="event-card" key={index}>
-                <img src={`https://event-managment-1l2o.onrender.com/${event.eventImage}`} alt={event.eventName} />
+                <img src={`http://localhost:3003/${event.eventImage}`} alt={event.eventName} />
                 <h3>{event.eventName}</h3>
                 <p>{event.eventDescription}</p>
                 <Link to={`${event._id}`} >
