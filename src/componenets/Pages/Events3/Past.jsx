@@ -15,7 +15,7 @@ export default function Past() {
     useEffect(() => {
       const fetchEvents = async () => {
         try {
-          const response = await axios.get('http://localhost:3003/post/event');
+          const response = await axios.get('https://event-managment-1l2o.onrender.com/post/event');
           const events = response.data;
 
           console.log(events)
@@ -50,7 +50,7 @@ export default function Past() {
             { inpersonEvents.length > 0 ? (
               inpersonEvents.map((event, index) => (
                 <div className="event-card" key={index}>
-                  <img className='img' src={`http://localhost:3003/${event.eventImage}`} alt={event.eventName} />
+                  <img className='img' src={`https://event-managment-1l2o.onrender.com/${event.eventImage}`} alt={event.eventName} />
                   <h3>{event.eventName}</h3>
                   <p>{event.eventDescription}</p>
                   <Link to={`${event._id}`} >

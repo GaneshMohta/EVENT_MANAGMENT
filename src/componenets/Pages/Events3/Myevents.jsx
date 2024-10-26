@@ -9,7 +9,7 @@ const Myevents = () => {
 
   useEffect(()=>{
     const fetchdata=async()=>{
-     const response =await axios.get(`http://localhost:3003/registration/register/events/`);
+     const response =await axios.get(`https://event-managment-1l2o.onrender.com/registration/register/events/`);
     const refilted = response.data.filter(f => f.userId === id);
     setEvents(refilted);
     }
@@ -21,7 +21,7 @@ useEffect(() => {
   const fetchdata = async () => {
     try {
       const requests = events.map((eve) =>
-        axios.get(`http://localhost:3003/post/${eve.Eventid}`)
+        axios.get(`https://event-managment-1l2o.onrender.com/post/${eve.Eventid}`)
       );
       const results = await Promise.all(requests); // Await all promises in parallel
 
@@ -39,7 +39,7 @@ useEffect(() => {
 // useEffect(()=>{
 //  const fetchdata=async()=>{
 //   try{
-//     const request = await refilted.map((eve)=>(axios.get(`http://localhost:3003/post/${eve.Eventid}`)));
+//     const request = await refilted.map((eve)=>(axios.get(`https://event-managment-1l2o.onrender.com/post/${eve.Eventid}`)));
 //     const result = await Promise.all(request);
 //     setMyevent(result.map(result=>result.data));
 //     console.log(myevent)
@@ -55,7 +55,7 @@ useEffect(() => {
   return (
     <div>
       <Navbar />
-{/* 
+{/*
       <div className='bg-slate-200 flex justify-evenly p-2'>
         <h1>Live</h1>
         <h1>Past</h1>
@@ -66,7 +66,7 @@ useEffect(() => {
           myevent.map((eve)=>(
               <div className='eve-container'>
                 <div className='w-[50%]'>
-                <img src={`http://localhost:3003/${eve.eventImage}`}/>
+                <img src={`https://event-managment-1l2o.onrender.com/${eve.eventImage}`}/>
                 </div>
                 <div className='eve-content w-[50%]'>
                 <h1>{eve.eventName}</h1>

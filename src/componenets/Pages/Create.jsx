@@ -56,7 +56,7 @@ const Create = () => {
 
     console.log('Event Data:', formData);
 
-    const response=await axios.post('http://localhost:3003/post/event',formData,
+    const response=await axios.post('https://event-managment-1l2o.onrender.com/post/event',formData,
       { headers: { 'Content-Type': 'multipart/form-data' }}
     );
 

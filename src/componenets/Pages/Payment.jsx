@@ -39,7 +39,7 @@ const Payment = ({ eventPrice , onUpdate }) => {
     }
 
     try {
-      const orderResponse = await axios.post('http://localhost:3003/payment/create-order', { amount });
+      const orderResponse = await axios.post('https://event-managment-1l2o.onrender.com/payment/create-order', { amount });
       const { amount: orderAmount, id: orderId, currency } = orderResponse.data;
 
       const options = {
@@ -51,7 +51,7 @@ const Payment = ({ eventPrice , onUpdate }) => {
         order_id: orderId,
         handler: async function (response) {
           try {
-            const verifyResponse = await axios.post('http://localhost:3003/payment/verify-payment', {
+            const verifyResponse = await axios.post('https://event-managment-1l2o.onrender.com/payment/verify-payment', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,

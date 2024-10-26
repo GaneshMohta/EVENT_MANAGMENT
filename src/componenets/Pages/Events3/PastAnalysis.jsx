@@ -17,7 +17,7 @@ export default function PastAnalysis() {
     useEffect(() => {
       const fetchEvents = async () => {
         try {
-          const response = await axios.get(`http://localhost:3003/post/${id}`);
+          const response = await axios.get(`https://event-managment-1l2o.onrender.com/post/${id}`);
           setEventData(response.data);
         } catch (err) {
           console.error('Error fetching events:', err);
@@ -30,8 +30,8 @@ export default function PastAnalysis() {
 
 
     useEffect(() => {
-        const fetchRegistration = axios.get(`http://localhost:3003/registration/${id}`);
-        const fetchAnalysis = axios.get(`http://localhost:3003/registration/analysis/${id}`);
+        const fetchRegistration = axios.get(`https://event-managment-1l2o.onrender.com/registration/${id}`);
+        const fetchAnalysis = axios.get(`https://event-managment-1l2o.onrender.com/registration/analysis/${id}`);
 
         Promise.all([fetchRegistration, fetchAnalysis])
           .then(([res1, res2]) => {

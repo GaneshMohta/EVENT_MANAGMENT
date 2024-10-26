@@ -36,7 +36,7 @@ const Register = () => {
     };
     console.log(payload);
       try {
-        const res = await axios.post("http://localhost:3003/user/sign-up", payload);
+        const res = await axios.post("https://event-managment-1l2o.onrender.com/user/sign-up", payload);
         localStorage.setItem("token", res.data.token);
         localStorage.setItem('userId', res.data.userId);
         localStorage.setItem("userRole", role);
