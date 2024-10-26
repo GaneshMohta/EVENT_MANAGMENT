@@ -19,7 +19,6 @@ export default function EveHeaderBody() {
           <h1 className='header-title'>Hey Organizer</h1>
           <p className='description'>Manage Your Events and Your Trade Show</p>
           <br />
-          <Link to="/Virtual"><button className="explore-button bg-black text-white text-xs">Organize Events</button></Link>
         </div>
       </div>
     </div>

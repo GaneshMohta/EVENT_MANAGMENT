@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import {BrowserRouter as Router, Routes ,Route } from 'react-router-dom';
 import Event from './componenets/Pages/Event'
@@ -11,6 +9,11 @@ import Upcoming from './componenets/Pages/Events3/Upcoming';
 import Create from './componenets/Pages/Create';
 import Hybrid from './componenets/Pages/Events3/Hybrid';
 import EveDet from './componenets/Pages/Events3/EveDet';
+import Past from './componenets/Pages/Events3/Past';
+import Virtual from './componenets/Pages/Events3/Virtual';
+import About from './componenets/Pages/About';
+import Myevents from './componenets/Pages/Events3/Myevents';
+import PastAnalysis from './componenets/Pages/Events3/PastAnalysis';
 
 function App() {
 
@@ -28,6 +31,13 @@ function App() {
         <Route path='/hybrid' element={<Hybrid />}></Route>
         <Route path='Upcoming/:id' element={<EveDet />}></Route>
         <Route path='in-person/:id' element={<EveDet />}></Route>
+        <Route path='/hybrid/:id' element={<EveDet />}></Route>
+        <Route path='/past/:id' element={<PastAnalysis/>}></Route>
+        <Route path='/Virtual/:id' element={<EveDet />}></Route>
+        <Route path='/past' element={<Past />}></Route>
+        <Route path='/Virtual' element={<Virtual />}></Route>
+        <Route path='/About' element={<About />}></Route>
+        <Route path='/myevents' element={<Myevents/>}></Route>
       </Routes>
       </Router>
     </>

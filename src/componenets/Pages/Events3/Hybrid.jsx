@@ -11,6 +11,7 @@ export default function Hybrid() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -18,7 +19,7 @@ export default function Hybrid() {
         const events = response.data;
 
         console.log(events)
-        const inperson = events.filter(event => event.eventType == "hybrid");
+        const inperson = events.filter(event => event.eventType == "hybrid" && new Date(event.Date) > Date.now());
         setInpersonEvents(inperson);
       } catch (err) {
         setError(err.message || 'Error fetching events');
@@ -93,18 +94,18 @@ export default function Hybrid() {
               </div>
             ))
           ) : (
-            <p>No Inperson events available at the moment.</p>
+            <p>No Hybrid events available at the moment.</p>
           )}
         </div>
       </section>
       ):(
-        <div className="event-cards">
+        <div className="event-cards event-section">
         <div className="card in-person text-center">
           <h2>Upcoming Events</h2>
 
 
 
-          <Link className='' to="/Upcoming"><button className="explore-button">Explore More</button></Link>
+          <Link className='' to="/Upcoming" state={{eventType:"hybrid"}}><button className="explore-button">Explore More</button></Link>
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1ifTq4ytPUHWbVv_0kFwMtLr5T_7SUGZ5EA&s"
             alt="In-person event"
@@ -113,7 +114,7 @@ export default function Hybrid() {
         </div>
         <div className="card virtual text-center">
           <h2>Past Events</h2>
-          <Link to="/Virtual"><button className="explore-button">Explore More</button></Link>
+          <Link Link to="/Past" state={{eventType:"hybrid" }}><button className="explore-button">Explore More</button></Link>
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgEOEx-WSVOw-4lcPPE9uJJpy4aHPOScG7gQ&s"
             alt="Virtual event"

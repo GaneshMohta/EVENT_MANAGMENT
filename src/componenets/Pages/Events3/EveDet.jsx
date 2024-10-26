@@ -22,6 +22,7 @@ export default function EveDet() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isPaymentReady, setPaymentReady] = useState(false);
   const [analysis , setAnalysis] = useState();
+  const [registerdEvents,setRegisteredEvents] = useState(0);
   const [cnt , setCnt] = useState(0);
   const navigate = useNavigate();
 
@@ -55,6 +56,22 @@ export default function EveDet() {
     fetchEvents();
   }, [id]);
 
+  useEffect(()=>{
+    const RegistrationEvent = async() => {
+    const Id = localStorage.getItem('userId');
+    const registedevent =await axios.get('http://localhost:3003/registration/register/events/');
+    console.log("hii",registedevent.data[0])
+    if( eventData?._id){
+    const filtedevent = registedevent.data.filter(f => f.Eventid === eventData?._id)
+     console.log(filtedevent)
+    const refilted = filtedevent.filter(f => f.userId === Id);
+
+    console.log("ref",refilted);
+    setRegisteredEvents(refilted.length);
+    }
+  }
+  RegistrationEvent();
+},[eventData?._id])
 
   useEffect(() => {
     const fetchRegistration = axios.get(`http://localhost:3003/registration/${id}`);
@@ -62,8 +79,8 @@ export default function EveDet() {
 
     Promise.all([fetchRegistration, fetchAnalysis])
       .then(([res1, res2]) => {
-        console.log(res1.data.count);
-        console.log("res2",res2.data);
+        // console.log(res1.data.count);
+        // console.log("res2",res2.data);
         setCnt(res1.data.count);
 
         const pieData = [
@@ -128,7 +145,7 @@ export default function EveDet() {
   };
 
   const createBarChart = (data) => {
-    const width = 400;
+    const width = 350;
     const height = 350;
     const margin = { top: -20, right: 30, bottom: 40, left: 40 };
 
@@ -136,7 +153,7 @@ export default function EveDet() {
     const svg = d3
       .select("#barChart")
       .append("svg")
-      .attr("width", width + margin.top + margin.bottom)
+      .attr("width", width  + margin.bottom)
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -256,9 +273,15 @@ export default function EveDet() {
                 <div className="free-tag">
                   ₹ {eventData?.price || 'Free'}
                 </div>
-                <button className="register-btn" onClick={handleOpenModal}>
-                  Register
-                </button>
+                {
+                  registerdEvents > 0 ? (<button className="p-3 rounded-sm bg-yellow-400">
+                    Already Register
+                  </button>):
+                  (<button className="register-btn" onClick={handleOpenModal}>
+                    Register
+                  </button>)
+                }
+
                 <div className="detail">
                   <p>👥 Team Size: {eventData?.teamSize || 1}</p>
                   <p>
@@ -275,19 +298,7 @@ export default function EveDet() {
                 >
                   Update Event
                 </button>
-                {/* <button
-                  className="register-btn"
-                  onClick={() => navigate(`/manage-speakers/${id}`)}
-                >
-                  Manage Speakers
-                </button>
-                <button
-                  className="register-btn"
-                  onClick={() => scrollTo(`pieChart`)}
 
-                >
-                  View Case Studies
-                </button> */}
               </div>
             )}
           </div>
@@ -407,8 +418,8 @@ export default function EveDet() {
       </Popup>
       { userType === 'admin' ?
         (<div className='bg-slate-950 text-white'>
-          <div className='text-center'><h1>Event Registration Studies</h1></div>
-          <div className='flex justify-evenly'>
+          <div className='text-center eve-head'><h1>Event Registration Studies</h1></div>
+          <div className='flex justify-evenly event-analysis'>
           <div id="pieChart"> <h1 className='text-center'><span className='text-orange-600'>Collection : </span> ₹{eventData?.price*cnt}</h1></div>
 
           <div>

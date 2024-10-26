@@ -6,11 +6,19 @@ const Payment = ({ eventPrice , onUpdate }) => {
   const [amount] = useState(eventPrice || 0);
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    if (amount === 0) {
-      alert('This event is free! Registration complete.');
+   let isMount = true;
+   const register = async ()=> {
+    if (amount === 0 && isMount) {
+      onUpdate();
+      alert('Registration complete.');
+      navigate('/');
     }
-  }, [amount, navigate]);
+  }
+  register();
+  return () => {isMount = false;};
+  }, [amount , navigate]);
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -52,7 +60,7 @@ const Payment = ({ eventPrice , onUpdate }) => {
             if (verifyResponse.data.message === 'Payment verified successfully') {
               onUpdate();
               alert('Payment successful! Registration complete.');
-              navigate('/In-person');
+              navigate('/');
             } else {
               alert('Payment verification failed');
             }
@@ -78,12 +86,6 @@ const Payment = ({ eventPrice , onUpdate }) => {
       alert('Failed to initiate payment.');
     }
   };
-
-  if (amount === 0) {
-
-    return null;
-  }
-
   return (
     <div>
       <h2>Complete Your Payment</h2>

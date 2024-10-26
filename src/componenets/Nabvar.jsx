@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import { Link, useNavigate } from 'react-router-dom';
+import img from '../assets/UTSAV.png'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
+  const role = localStorage.getItem('userRole')
 
   useEffect(() => {
     const email = localStorage.getItem('userEmail');
+
     if (email) {
       setUserEmail(email);
       const [names] = email.split('@');
@@ -35,8 +38,8 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <h1 className="logo text-green-300 text-pretty">UTSAAV</h1>
-
+      {/* <h1 className="logo text-green-300 text-pretty">UTSAAV</h1> */}
+      <img src={img} alt='logo'className='logo'/>
       <div className="menu-icon" onClick={toggleMenu}>
         <div className={`bar ${menuOpen ? 'bar1' : ''}`}>.</div>
         <div className={`bar ${menuOpen ? 'bar2' : ''}`}>.</div>
@@ -46,8 +49,8 @@ export default function Navbar() {
       <nav className={`nav-links ${menuOpen ? 'active' : ''}`}>
         <ul>
           <li><Link to="/">HOME</Link></li>
-          <li><a href="#aboutus">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="/About">About Us</a></li>
+          {role === 'user' ? (<li><a href="/myevents">My Events</a></li>): (<div></div>)}
           {userEmail ? (
             <li className="user-email" onClick={handleLogout}>
               {username}

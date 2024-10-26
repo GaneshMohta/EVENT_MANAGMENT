@@ -17,7 +17,9 @@ const Create = () => {
   const [imagePreview, setImagePreview] = useState('');
   const [date , setDate] = useState('');
 
-  const Id = localStorage.getItem('userId');
+  const AdminId = localStorage.getItem('userId');
+
+  console.log("id",AdminId)
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -42,7 +44,7 @@ const Create = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('AdminId', Id);
+    formData.append('AdminId', AdminId);
     formData.append('eventType', eventType);
     formData.append('eventName', eventName);
     formData.append('speakerName', speakerName);

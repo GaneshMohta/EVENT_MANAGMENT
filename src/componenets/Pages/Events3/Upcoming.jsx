@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'; // Import axios to fetch data
+import axios from 'axios';
 import './eve3.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import Navbar from '../../Nabvar';
 
 const Upcoming = () => {
+  const location =useLocation();
   const [inpersonEvents, setInpersonEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const eventtype = location.state.eventType || {};
+  console.log("Type",eventtype);
+  const AdminId = localStorage.getItem('userId');
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -15,7 +18,7 @@ const Upcoming = () => {
         const events = response.data;
 
         console.log(events)
-        const inperson = events.filter(event => event.eventType == "in-person");
+        const inperson = events.filter(event => (event.eventType == eventtype && new Date(event.Date) > Date.now()) && AdminId == event.AdminId);
         setInpersonEvents(inperson);
       } catch (err) {
         setError(err.message || 'Error fetching events');
@@ -29,16 +32,8 @@ const Upcoming = () => {
 
   return (
     <div>
-      <header className="navbar ">
-        <h1 className='logo text-green-300 text-pretty'>UTSAAV</h1>
-        <nav>
-          <ul>
-            <li><Link to='/'>HOME</Link></li>
-            <li><a href="#aboutus">Speaker</a></li>
-            <li><a href="#contact">Attendance</a></li>
-          </ul>
-        </nav>
-      </header>
+
+      <Navbar />
 
       <section className="welcome-section">
         <h1>Welcome to Utsaav</h1>
@@ -46,9 +41,8 @@ const Upcoming = () => {
       </section>
 
       <section id="events" className="event-section">
-        <h2>Upcoming Inperson Events</h2>
+        <h2>Upcoming {eventtype} Events</h2>
         <div className="events-container">
-          {/* {loading && <p>Loading events...</p>} */}
           {error && <p>Error: {error}</p>}
           { inpersonEvents.length > 0 ? (
             inpersonEvents.map((event, index) => (

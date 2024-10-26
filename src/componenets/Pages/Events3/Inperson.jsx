@@ -17,7 +17,7 @@ const Inperson = () => {
         const events = response.data;
 
         console.log(events)
-        const inperson = events.filter(event => event.eventType == "in-person");
+        const inperson = events.filter(event => event.eventType == "in-person" && new Date(event.Date)> Date.now());
         setInpersonEvents(inperson);
       } catch (err) {
         setError(err.message || 'Error fetching events');
@@ -52,11 +52,6 @@ const Inperson = () => {
             <h1 className="header-title">Hey Organizer</h1>
             <p className="description">Manage Your Events and Your Trade Show</p>
             <br />
-            <Link to="/Virtual">
-              <button className="explore-button bg-black text-white text-xs">
-                Organize Events
-              </button>
-            </Link>
           </div>
         </div>
 
@@ -73,7 +68,7 @@ const Inperson = () => {
             <div className="event-cards">
               <div className="card in-person text-center">
                 <h2>Upcoming Events</h2>
-                <Link className="" to="/Upcoming">
+                <Link className="" to="/Upcoming" state={{eventType:"in-person" }} >
                   <button className="explore-button">Explore More</button>
                 </Link>
                 <img
@@ -84,7 +79,7 @@ const Inperson = () => {
               </div>
               <div className="card virtual text-center">
                 <h2>Past Events</h2>
-                <Link to="/Past">
+                <Link to="/Past" state={{eventType:"in-person" }}>
                   <button className="explore-button">Explore More</button>
                 </Link>
                 <img

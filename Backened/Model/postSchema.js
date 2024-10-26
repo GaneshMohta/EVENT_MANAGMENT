@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const postSchema = new mongoose.Schema({
     _id: { type: String, default: uuidv4 },
-    Adminid : {type: String},
+    AdminId : {type: String, ref:'User', required: true},
     eventType: { type: String, required: true },
     eventName: { type: String, required: true },
     speakerName: { type: String, required: true },

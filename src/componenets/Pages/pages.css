@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+
     scroll-behavior: smooth;
 }
 
@@ -21,11 +21,11 @@
 } */
 
 .navbar .logo {
-    font-family: "Nunito", sans-serif;
-    font-style: italic;
-    letter-spacing: 2px;
-    position: relative;
-    top: 25px;
+  height: 35vh;
+  position: relative;
+
+  bottom: 10%;
+
 }
 
 .navbar ul {
@@ -78,11 +78,13 @@
 
 .content h1 {
     font-size: 70px;
-    font-style: italic;
+    font-family: Pacifico;
+    font-weight: 600;
+    /* font-style: italic; */
 }
 
 footer h1 {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: Poppins;
     font-size: 30px;
     text-align: center;
     font-style: italic;
@@ -144,6 +146,7 @@ footer span {
 .about-section h2 {
     font-size: 36px;
     margin-bottom: 20px;
+    color: #007bff;
 }
 
 .about-section p {
@@ -251,6 +254,7 @@ form button[type="submit"]:hover {
 .event-cards {
     display: flex;
     justify-content: center;
+    font-family: poppins;
     gap: 20px;
 }
 
@@ -265,8 +269,8 @@ form button[type="submit"]:hover {
 }
 
 .card h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
+    font-size: 30px;
+    margin-bottom: 5px;
 }
 
 .card p {
@@ -299,11 +303,11 @@ form button[type="submit"]:hover {
 }
 
 .in-person {
-    background: linear-gradient(to bottom, #662d91, #912d73);
+    background: linear-gradient(to bottom, #009688, #4bff74)
 }
 
 .virtual {
-    background: linear-gradient(to bottom, #0059b2, #00c6ff);
+    background: linear-gradient(to bottom, #000000, #00c6ff);
 }
 
 .hybrid {
@@ -347,12 +351,102 @@ form button[type="submit"]:hover {
 
 
 
+.eve-container {
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 90%;
+    height: 50vh;
+    margin: 10px auto;
+}
+
+.eve-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.eve-container img {
+    width: 80%;
+    height: 100%;
+    border-radius: 8px;
+    margin-right: 30px;
+
+    margin-bottom: 10px;
+}
+
+.eve-content {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eve-content h1 {
+    font-size: 50px;
+    color: orangered;
+    font-family: 'Roboto',"Nunito";
+    margin: 10px 0;
+}
+
+.eve-content p {
+    font-size: 26px;
+    margin: 5px 0;
+}
+
+
 @media only screen and (max-width: 768px) {
+.navbar .logo{
+    height: 25vh;
+    position: relative;
+    right: 10%;
+    bottom: 10%;
+}
     .event-cards {
         flex-direction: column;
         align-items: center;
     }
+    footer h1 {
+        font-size: 20px;
+    }
 
+    .eve-container {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 10%;
+        height: 100%;
+        padding: 2px;
+    }
+
+    .eve-container img {
+        width: 100%;
+        height: 80%;
+        position: relative;
+
+
+    }
+
+    .eve-content{
+        height: 20%;
+        margin: 0%;
+    }
+
+    .eve-content h1{
+        font-size: 26px;
+        font-weight: 600;
+    }
+
+    .eve-container p{
+        font-size: 26px;
+    }
+    .eve-content {
+        align-items: flex-start;
+
+    }
 
     .card {
         width: 90%;
