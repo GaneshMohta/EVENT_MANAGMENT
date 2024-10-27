@@ -49,8 +49,8 @@ export default function Navbar() {
       <nav className={`nav-links ${menuOpen ? 'active' : ''}`}>
         <ul>
           <li><Link to="/">HOME</Link></li>
-          <li><a href="/About">About Us</a></li>
-          {role === 'user' ? (<li><a href="/myevents">My Events</a></li>): (<div></div>)}
+          <li><Link to="/About">About Us</Link></li>
+          {role === 'user' ? (<li><Link to="/myevents">My Events</Link></li>): (<div></div>)}
           {userEmail ? (
             <li className="user-email" onClick={handleLogout}>
               {username}

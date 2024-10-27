@@ -4,10 +4,18 @@ import axios from 'axios';
 
 const Login = () => {
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    // const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+
+    const [password, setPassword] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible((prev) => !prev);
+    };
+
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
@@ -80,7 +88,7 @@ const Login = () => {
                                 onChange={handleChangeEmail}
                                 value={email}
                             />
-                            <input
+                            {/* <input
                                 className='input-field'
                                 placeholder='Password'
                                 type='password'
@@ -88,7 +96,34 @@ const Login = () => {
                                 id='password'
                                 onChange={handleChangePassword}
                                 value={password}
-                            />
+                            /> */}
+                    <div style={{ position: 'relative', width: '100%' }}>
+                                <input
+                                    className='input-field'
+                                    placeholder='Password'
+                                    type={isPasswordVisible ? 'text' : 'password'}
+                                    name='password'
+                                    id='password'
+                                    onChange={handleChangePassword}
+                                    value={password}
+                                />
+                                <button
+                                    type='button'
+                                    onClick={togglePasswordVisibility}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    {isPasswordVisible ? '👁️' : '🙈'}
+                                </button>
+                            </div>
+
                             <div className='role-selection'>
                                 <label>
                                     <input

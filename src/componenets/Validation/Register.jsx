@@ -9,6 +9,12 @@ const Register = () => {
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+      setIsPasswordVisible((prev) => !prev);
+  };
+
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -76,14 +82,33 @@ const Register = () => {
                 placeholder='Ganesh@gmail.com'
                 onChange={handleChangeEmail}
               />
-              <input
-                className='input-field'
-                placeholder='Password'
-                type='password'
-                name='password'
-                id='password'
-                onChange={handleChangePassword}
-              />
+              <div style={{ position: 'relative', width: '100%' }}>
+                             <input
+                                  className='input-field'
+                                  placeholder='Password'
+                                  type={isPasswordVisible ? 'text' : 'password'}
+                                  name='password'
+                                  id='password'
+                                  onChange={handleChangePassword}
+                                  value={password}
+                                  />
+                                  <button
+                                 type='button'
+                                 onClick={togglePasswordVisibility}
+                                 style={{
+                                 position: 'absolute',
+                                 right: '10px',
+                                 top: '50%',
+                                 transform: 'translateY(-50%)',
+                                 background: 'none',
+                                 border: 'none',
+                                 cursor: 'pointer',
+                                 }}
+                                  >
+                                 {isPasswordVisible ? '👁️' : '🙈'}
+                                  </button>
+                            </div>
+
               <div className='role-selection'>
                 <label>
                   <input
