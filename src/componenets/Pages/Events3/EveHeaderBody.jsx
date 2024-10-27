@@ -3,6 +3,7 @@ import Nabvar from '../../Nabvar'
 import { Link } from 'react-router-dom'
 
 export default function EveHeaderBody() {
+  const userRole = localStorage.getItem('userRole') || 'user';
   return (
     <div>
       <Nabvar />
@@ -14,12 +15,16 @@ export default function EveHeaderBody() {
             alt='Organizer Illustration'
           />
         </div>
-
-        <div className='text-container'>
+        {userRole === "user" ? (<div className='text-container'>
+          <h1 className='header-title'>Hey User</h1>
+          <p className='description'>Book Your Events and Your Trade Show</p>
+          <br />
+        </div>): (<div className='text-container'>
           <h1 className='header-title'>Hey Organizer</h1>
           <p className='description'>Manage Your Events and Your Trade Show</p>
           <br />
-        </div>
+        </div>)}
+
       </div>
     </div>
   )

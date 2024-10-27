@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './eve3.css';
 import axios from 'axios'
-import Navbar from '../../Nabvar'; // Ensure the correct spelling and path
+import Navbar from '../../Nabvar';
 
 const Inperson = () => {
 
   const [inpersonEvents, setInpersonEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const fetchEvents = async () => {

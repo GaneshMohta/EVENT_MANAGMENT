@@ -9,7 +9,7 @@ const Myevents = () => {
 
   useEffect(()=>{
     const fetchdata=async()=>{
-     const response =await axios.get(`https://event-managment-1l2o.onrender.com/registration/register/events/`);
+     const response =await axios.get(`https://event-managment-1l2o.onrender.com/registration/register/events`);
     const refilted = response.data.filter(f => f.userId === id);
     setEvents(refilted);
     }
@@ -20,13 +20,11 @@ const Myevents = () => {
 useEffect(() => {
   const fetchdata = async () => {
     try {
-      const requests = events.map((eve) =>
+      const requests =await events.map((eve) =>
         axios.get(`https://event-managment-1l2o.onrender.com/post/${eve.Eventid}`)
       );
-      const results = await Promise.all(requests); // Await all promises in parallel
-
-      // If you want to store the results in `myevent`, make sure it's a state variable.
-      setMyevent(results.map(result => result.data)); // Assuming you have setMyevent to update state
+      const results = await Promise.all(requests);
+      setMyevent(results.map(result => result.data));
       console.log(myevent)
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -36,34 +34,18 @@ useEffect(() => {
   fetchdata();
 }, [events]);
 
-// useEffect(()=>{
-//  const fetchdata=async()=>{
-//   try{
-//     const request = await refilted.map((eve)=>(axios.get(`https://event-managment-1l2o.onrender.com/post/${eve.Eventid}`)));
-//     const result = await Promise.all(request);
-//     setMyevent(result.map(result=>result.data));
-//     console.log(myevent)
-//   }
-//   catch (e){
 
-//   }
-//  }
-//  fetchdata();
-// },[])
 
 
   return (
     <div>
       <Navbar />
-{/*
-      <div className='bg-slate-200 flex justify-evenly p-2'>
-        <h1>Live</h1>
-        <h1>Past</h1>
-      </div> */}
+      <div className='bg-gray-300 text-center p-2 text-orange-600'><h1>Registered Events</h1></div>
       <div>
         {
           myevent.length > 0 ? (
           myevent.map((eve)=>(
+
               <div className='eve-container'>
                 <div className='w-[50%]'>
                 <img src={`https://event-managment-1l2o.onrender.com/${eve.eventImage}`}/>

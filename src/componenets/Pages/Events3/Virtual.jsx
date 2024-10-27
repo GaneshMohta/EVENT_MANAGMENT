@@ -10,6 +10,9 @@ export default function Virtual() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+    useEffect(() => {
       const fetchEvents = async () => {
         try {
           const response = await axios.get('https://event-managment-1l2o.onrender.com/post/event');

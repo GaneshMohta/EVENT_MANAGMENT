@@ -393,7 +393,7 @@ form button[type="submit"]:hover {
 }
 
 .eve-content p {
-    font-size: 26px;
+   
     margin: 5px 0;
 }
 
@@ -440,9 +440,7 @@ form button[type="submit"]:hover {
         font-weight: 600;
     }
 
-    .eve-container p{
-        font-size: 26px;
-    }
+
     .eve-content {
         align-items: flex-start;
 
