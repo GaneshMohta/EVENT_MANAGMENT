@@ -62,12 +62,12 @@ const Login = () => {
                 </div>
 
                 <div className='form-section'>
-                    <div className='flex justify-center'>
+                    {/* <div className='flex justify-center'>
                         <button className='google-login-btn'>Continue with Google</button>
                     </div>
                     <p className='text-center'>
                         <span className='divider'>________</span> or <span className='divider'>________</span>
-                    </p>
+                    </p> */}
 
                     <div className='flex justify-center'>
                         <form className='flex flex-col gap-3 w-80 rounded-md items-center' onSubmit={handleLogin}>
